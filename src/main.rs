@@ -12,6 +12,11 @@ use rocket_cors::{AllowedOrigins, CorsOptions};
 use crate::jsons::{IntroResponse, MinigameResponse, PromptResponse};
 use crate::prompt_data::{Prompt, PromptData};
 
+fn time_nice() -> String {
+    let now = chrono::Utc::now();
+    now.to_rfc3339_opts(chrono::SecondsFormat::Secs, true)
+
+}
 
 #[get("/introduction")]
 fn introduction(prompt_data: &State<PromptData>) -> Json<IntroResponse> {
@@ -22,6 +27,7 @@ fn introduction(prompt_data: &State<PromptData>) -> Json<IntroResponse> {
 
     let introduction = prompt_data.introductions[num].clone();
 
+    println!("[{}] served an Introduction", time_nice());
     Json(IntroResponse{
         success: true,
         introduction
@@ -37,6 +43,7 @@ fn prompt(prompt_data: &State<PromptData>) -> Json<PromptResponse> {
 
     let prompt = prompt_data.prompts[num].clone();
 
+    println!("[{}] served a Prompt", time_nice());
     Json(PromptResponse{
         success: true,
         prompt
@@ -52,6 +59,7 @@ fn minigame(prompt_data: &State<PromptData>) -> Json<MinigameResponse> {
 
     let minigame = prompt_data.minigames[num].clone();
 
+    println!("[{}] served a Minigame", time_nice());
     Json(MinigameResponse{
         success: true,
         minigame
@@ -60,26 +68,31 @@ fn minigame(prompt_data: &State<PromptData>) -> Json<MinigameResponse> {
 
 #[get("/app.js")]
 async fn app() -> Option<NamedFile>{
+    println!("[{}] served app.js", time_nice());
     NamedFile::open("/static/app.js").await.ok()
 }
 
 #[get("/style.css")]
 async fn style() -> Option<NamedFile>{
+    println!("[{}] served style.css", time_nice());
     NamedFile::open("/static/style.css").await.ok()
 }
 
 #[get("/favicon.ico")]
 async fn favicon() -> Option<NamedFile>{
+    println!("[{}] served favicon.ico", time_nice());
     NamedFile::open("/static/favicon.ico").await.ok()
 }
 
 #[get("/index.html")]
 async fn index_html() -> Option<NamedFile>{
+    println!("[{}] served index.html", time_nice());
     NamedFile::open("/static/index.html").await.ok()
 }
 
 #[get("/")]
 async fn index() -> Option<NamedFile> {
+    println!("[{}] served index.html", time_nice());
     NamedFile::open("/static/index.html").await.ok()
 }
 
@@ -100,6 +113,6 @@ fn rocket() -> _ {
                 .collect(),
         )
         .allow_credentials(true);
-
+    println!("[{}] starting...", time_nice());
     rocket::build().mount("/", routes![index, app, style, favicon, index_html, introduction, prompt, minigame]).manage(prompt_data).attach(cors.to_cors().unwrap())
 }
