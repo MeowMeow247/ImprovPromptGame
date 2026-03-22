@@ -21,7 +21,7 @@ fn introduction(prompt_data: &State<PromptData>) -> Json<IntroResponse> {
 
     let min: usize = 0;
     let max = prompt_data.introductions.len();
-    let num = rand::thread_rng().gen_range(min..=max);
+    let num = rand::thread_rng().gen_range(min..max);
 
     let introduction = prompt_data.introductions[num].clone();
 
@@ -36,7 +36,7 @@ fn prompt(prompt_data: &State<PromptData>) -> Json<PromptResponse> {
 
     let min: usize = 0;
     let max = prompt_data.prompts.len();
-    let num = rand::thread_rng().gen_range(min..=max);
+    let num = rand::thread_rng().gen_range(min..max);
 
     let prompt = prompt_data.prompts[num].clone();
 
@@ -51,7 +51,7 @@ fn minigame(prompt_data: &State<PromptData>) -> Json<MinigameResponse> {
 
     let min: usize = 0;
     let max = prompt_data.minigames.len();
-    let num = rand::thread_rng().gen_range(min..=max);
+    let num = rand::thread_rng().gen_range(min..max);
 
     let minigame = prompt_data.minigames[num].clone();
 
