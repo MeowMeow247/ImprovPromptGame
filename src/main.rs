@@ -4,6 +4,7 @@ mod jsons;
 #[macro_use] extern crate rocket;
 
 use rand::Rng;
+use rocket::fs::NamedFile;
 use rocket::serde::{Serialize, json::Json};
 use rocket::State;
 use rocket::http::Method;
@@ -11,10 +12,6 @@ use rocket_cors::{AllowedOrigins, CorsOptions};
 use crate::jsons::{IntroResponse, MinigameResponse, PromptResponse};
 use crate::prompt_data::{Prompt, PromptData};
 
-#[get("/")]
-fn index() -> &'static str {
-    "not here! open either /introduction, /prompt or /minigame for a random improv prompt!"
-}
 
 #[get("/introduction")]
 fn introduction(prompt_data: &State<PromptData>) -> Json<IntroResponse> {
@@ -61,9 +58,34 @@ fn minigame(prompt_data: &State<PromptData>) -> Json<MinigameResponse> {
     })
 }
 
+#[get("/app.js")]
+async fn app() -> Option<NamedFile>{
+    NamedFile::open("/static/app.js").await.ok()
+}
+
+#[get("/style.css")]
+async fn style() -> Option<NamedFile>{
+    NamedFile::open("/static/style.css").await.ok()
+}
+
+#[get("/favicon.ico")]
+async fn favicon() -> Option<NamedFile>{
+    NamedFile::open("/static/favicon.ico").await.ok()
+}
+
+#[get("/index.html")]
+async fn index_html() -> Option<NamedFile>{
+    NamedFile::open("/static/index.html").await.ok()
+}
+
+#[get("/")]
+async fn index() -> Option<NamedFile> {
+    NamedFile::open("/static/index.html").await.ok()
+}
+
 #[launch]
 fn rocket() -> _ {
-    let prompt_file_path = "./static/prompts_data.json".to_string();
+    let prompt_file_path = "/static/prompts_data.json".to_string();
     let prompt_data: PromptData = PromptData::from_file(&prompt_file_path).unwrap_or_else(|| {
         eprintln!("failed to load prompt data struct :(");
         PromptData::empty()
@@ -79,5 +101,5 @@ fn rocket() -> _ {
         )
         .allow_credentials(true);
 
-    rocket::build().mount("/", routes![index, introduction, prompt, minigame]).manage(prompt_data).attach(cors.to_cors().unwrap())
+    rocket::build().mount("/", routes![index, app, style, favicon, index_html, introduction, prompt, minigame]).manage(prompt_data).attach(cors.to_cors().unwrap())
 }

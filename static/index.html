@@ -1,0 +1,45 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="/style.css">
+  <meta name="description" content="">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <!-- Add your site or application content here -->
+  <script src="/app.js"></script>
+  <div class="app">
+  <h3>get a random improvisational...</h3>
+  <div>
+    <button id="button2" class="bigButton" onclick="getIntroduction();">Introduction</button>
+    <button id="button1" class="bigButton" onclick="getPrompt();">Prompt</button>
+    <button id="button3" class="bigButton" onclick="getMinigame();">Minigame</button>
+  </div>
+  <h2 id="prompt_result"></h2>
+  <h1 id="minigame_title"></h1>
+  <button id="button5" class="smallButton" hidden onclick="newMinigamePrompt();">Other Prompt</button>
+  <h2 id="minigame_prompt"></h2>
+  <button id="button4" class="smallButton" hidden onclick="advanceModifier();">Next Sub-Prompt</button>
+  <h3 id="minigame_modifier"></h3>
+  </div>
+
+  <p class="disclaimer">Best viewed on a phone - this is raw html and css there is NO dynamic scaling. Prompts taken from Dropout's "Make Some Noise" show, please don't sue me Sam Reich :)</p>
+
+</body>
+
+</html>
