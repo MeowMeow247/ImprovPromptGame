@@ -1,6 +1,6 @@
 # Improv Prompt Game
 
-A tiny Webserver + bare html/css/js Website that lets you get random Improv Prompts anywhere, anytime!
+A tiny Webserver + bare html/css/js Website made in an afternoon that lets you get random Improv Prompts anywhere, anytime!
 <br>
 NO vibe coding was used in the process of making this, though I acknowledge that an LLM would have probably put out something more professional looking. Well, you get what you pay for.
 <br>
