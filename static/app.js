@@ -66,7 +66,12 @@ async function getIntroduction() {
 
     const result = await response.json();
     console.log(result);
-    document.getElementById("prompt_result").innerHTML = result["introduction"]["introduction"];
+    let introduction = result["introduction"]["introduction"];
+    if (players.length > 0){
+      let name = players[player_turn]['name']+"!";
+      introduction = introduction.replace('[NAME]', name)
+    }
+    document.getElementById("prompt_result").innerHTML = introduction;
   } catch (error) {
     console.error(error.message);
   }
@@ -186,13 +191,16 @@ async function givePoint(){
 }
 
 async function nextPlayer(){
+  if (!players[player_turn]['introduced']){
+    players[player_turn]['introduced'] = true;
+  }
   player_turn += 1;
   if (player_turn > (players.length-1)){
     player_turn = 0;
   }
   set_player_turn();
   show_players();
-  await getPrompt();
+  await getPlayerPrompt();
 }
 
 function set_player_turn(){
@@ -218,6 +226,15 @@ function show_players_ui(show){
 
 }
 
+async function getPlayerPrompt(){
+  if (players[player_turn]['introduced']){
+    await getPrompt();
+  }
+  else{
+    await getIntroduction();
+  }
+}
+
 async function init(){
   // get players from request variables
   let players_s = getUrlParameter("players");
@@ -226,7 +243,7 @@ async function init(){
     let split = players_s.split(",");
     for (let x = 0; x < split.length; x++){
       let player = split[x];
-      data.push({'name': player, 'score': 0, 'turn': false})
+      data.push({'name': player, 'score': 0, 'turn': false, 'introduced': false})
       if (player.length > longest_player_name){
         longest_player_name = player.length;
       }
@@ -237,9 +254,9 @@ async function init(){
     document.getElementById("button_setup").hidden = true;
     set_player_turn();
     show_players();
-    await getPrompt();
     show_players_ui(true);
     show_base_ui(false);
+    await getPlayerPrompt();
   }
   else{
     show_players_ui(false);
