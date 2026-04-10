@@ -15,6 +15,7 @@ function showPlayers(){
 
 async function resetPlayers(){
     players = [];
+    document.getElementById('player_input').value = "";
     showPlayers();
 }
 
